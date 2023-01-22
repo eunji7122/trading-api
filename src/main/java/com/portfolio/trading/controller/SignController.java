@@ -1,8 +1,11 @@
 package com.portfolio.trading.controller;
 
+import com.portfolio.trading.common.ApiResponse;
 import com.portfolio.trading.data.dto.jwt.TokenDto;
+import com.portfolio.trading.data.dto.member.MemberResponseDto;
 import com.portfolio.trading.data.dto.member.MemberSigninRequestDto;
 import com.portfolio.trading.data.dto.member.MemberSignupRequestDto;
+import com.portfolio.trading.data.dto.response.SingleResult;
 import com.portfolio.trading.data.entity.member.Member;
 import com.portfolio.trading.service.security.SignService;
 import lombok.RequiredArgsConstructor;
@@ -21,16 +24,17 @@ public class SignController {
     private final SignService signService;
 
     @PostMapping("/sign-in")
-    public String signIn(@RequestBody MemberSigninRequestDto memberSigninRequestDto) {
+    public SingleResult<TokenDto> signIn(@RequestBody MemberSigninRequestDto memberSigninRequestDto) {
 
         TokenDto tokenDto = signService.signIn(memberSigninRequestDto);
-        return tokenDto.getAccessToken();
+        return ApiResponse.getSingleResult(tokenDto);
     }
 
     @PostMapping("/sign-up")
-    public String signUp(@RequestBody MemberSignupRequestDto memberSignupRequestDto) {
+    public SingleResult<MemberResponseDto> signUp(@RequestBody MemberSignupRequestDto memberSignupRequestDto) {
 
         Member member = signService.signup(memberSignupRequestDto);
-        return member.getEmail();
+        MemberResponseDto memberResponseDto = new MemberResponseDto(member);
+        return ApiResponse.getSingleResult(memberResponseDto);
     }
 }
