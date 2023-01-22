@@ -1,4 +1,4 @@
-package com.portfolio.trading.data.entity;
+package com.portfolio.trading.data.entity.member;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;

@@ -1,9 +1,7 @@
 package com.portfolio.trading.config.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.portfolio.trading.data.dto.jwt.TokenDto;
+import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +25,8 @@ public class JwtTokenProvider {
 
     @Value("{springboot.jwt.secret")
     private String secretKey = "secretKey";
-    private final long tokenValidMillisecond = 1000L * 60 * 60;
+    private final long accessTokenValidMillisecond = 1000L * 60 * 60;
+    private final Long refreshTokenValidMillisecond = 14 * 24 * 60 * 60 * 1000L;
 
     @PostConstruct
     protected void init() {
@@ -35,17 +34,30 @@ public class JwtTokenProvider {
     }
 
     // 토큰 생성
-    public String createToken(String userUid, List<String> roles) {
-        Claims claims = Jwts.claims().setSubject(userUid);
+    public TokenDto createToken(String userEmail, String roles) {
+        Claims claims = Jwts.claims().setSubject(userEmail);
         claims.put("roles", roles);
         Date now = new Date();
 
-        return Jwts.builder()
+        String accessToken = Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + tokenValidMillisecond))
+                .setExpiration(new Date(now.getTime() + accessTokenValidMillisecond))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+
+        String refreshToken = Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setExpiration(new Date(now.getTime() + refreshTokenValidMillisecond))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+
+        return TokenDto.builder()
+                .grantType("Bearer")
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .accessTokenExpireDate(accessTokenValidMillisecond)
+                .build();
     }
 
     // 토큰 인증 정보 조회

@@ -1,6 +1,6 @@
 package com.portfolio.trading.service.security;
 
-import com.portfolio.trading.data.repository.MemberRepository;
+import com.portfolio.trading.data.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

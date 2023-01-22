@@ -1,7 +1,6 @@
-package com.portfolio.trading.data.dto;
+package com.portfolio.trading.data.dto.member;
 
-import com.portfolio.trading.data.entity.Member;
-import lombok.Builder;
+import com.portfolio.trading.data.entity.member.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,12 +12,6 @@ public class MemberRequestDto {
 
     private String email;
     private String username;
-
-    @Builder
-    public MemberRequestDto(String email, String name) {
-        this.email = email;
-        this.username = name;
-    }
 
     public Member toEntity() {
         return Member.builder()
