@@ -14,13 +14,13 @@ public class MemberResponseDto {
     private final String email;
     private final String username;
     private Role role;
-    private Collection<? extends GrantedAuthority> authorities;
+//    private Collection<? extends GrantedAuthority> authorities;
 
     public MemberResponseDto(Member member) {
         this.id = member.getId();
         this.email = member.getEmail();
         this.username = member.getUsername();
         this.role = member.getRole();
-        this.authorities = member.getAuthorities();
+//        this.authorities = member.getAuthorities();
     }
 }

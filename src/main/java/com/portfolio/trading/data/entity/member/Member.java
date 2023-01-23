@@ -16,7 +16,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @Builder
 @Table
-public class Member implements UserDetails {
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,48 +39,59 @@ public class Member implements UserDetails {
 
     private String providerId; // oauth2를 이용할 경우 아이디값
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> collection = new ArrayList<>();
-
-        collection.add((GrantedAuthority) () -> "ROLE_" + getRole().toString());
-//        collection.add(new SimpleGrantedAuthority("ROLE_" + member.getRole().toString()));
-        return collection;
+    @Builder(builderClassName = "OAuth2Register", builderMethodName = "oauth2Register")
+    public Member(String email, String password, String username, Role role, String provider, String providerId) {
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.role = role;
+        this.provider = provider;
+        this.providerId = providerId;
     }
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Override
-    public String getUsername() {
-        return this.username;
-    }
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        Collection<GrantedAuthority> collection = new ArrayList<>();
+//
+//        collection.add((GrantedAuthority) () -> "ROLE_" + getRole().toString());
+////        collection.add(new SimpleGrantedAuthority("ROLE_" + member.getRole().toString()));
+//        return collection;
+//    }
+//
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    @Override
+//    public String getPassword() {
+//        return this.password;
+//    }
+//
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    @Override
+//    public String getUsername() {
+//        return this.username;
+//    }
+//
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    @Override
+//    public boolean isAccountNonExpired() {
+//        return true;
+//    }
+//
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    @Override
+//    public boolean isAccountNonLocked() {
+//        return true;
+//    }
+//
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    @Override
+//    public boolean isCredentialsNonExpired() {
+//        return true;
+//    }
+//
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    @Override
+//    public boolean isEnabled() {
+//        return true;
+//    }
 }

@@ -1,5 +1,6 @@
 package com.portfolio.trading.config.security;
 
+import com.portfolio.trading.service.auth.PrincipalOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final PrincipalOAuth2UserService principalOAuth2UserService;
 
     private static final String[] AUTH_WHITELIST = {
             "/img/**",
@@ -41,6 +43,14 @@ public class SecurityConfig {
                 .requestMatchers("**exception**").permitAll()
 
                 .anyRequest().hasRole("ADMIN") // 나머지 요청은 인증된 ADMIN만 접근 가능
+
+                .and()
+                .oauth2Login()
+                .defaultSuccessUrl("/trading")
+                .failureUrl("/")
+                .userInfoEndpoint()
+                .userService(principalOAuth2UserService)
+                .and()
 
                 .and()
                 .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
