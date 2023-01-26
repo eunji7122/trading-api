@@ -20,11 +20,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = jwtTokenProvider.resolveToken(request);
-        if (token != null && jwtTokenProvider.validateToken(token)) {
-            Authentication authentication = jwtTokenProvider.getAuthentication(token);
+        if (token != null && jwtTokenProvider.validateToken(parseToken(token))) {
+            Authentication authentication = jwtTokenProvider.getAuthentication(parseToken(token));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private String parseToken(String token) {
+        // 토큰 정보에서 토큰 타입(Bearer) 제외하고 추출
+        String[] array = token.split(" ");
+        return array[1];
     }
 }

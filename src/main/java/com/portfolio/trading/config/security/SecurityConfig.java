@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,15 +32,12 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
                 .and()
                 .authorizeHttpRequests() // 리퀘스트에 대한 사용권한 체크
-                .requestMatchers("/sign-api/sign-in", "/sign-api/sign-up",
-                        "/sign-api/exception").permitAll() // 가입 및 로그인 주소는 허용
-                .requestMatchers(HttpMethod.GET, "/product/**").permitAll() // product로 시작하는 Get 요청은 허용
-
+                .requestMatchers("/sign-api/**").permitAll()
                 .requestMatchers("**exception**").permitAll()
-
-                .anyRequest().hasRole("ADMIN") // 나머지 요청은 인증된 ADMIN만 접근 가능
+                .anyRequest().authenticated() // 그 외 모든 요청은 인증과정 필요
 
                 .and()
                 .oauth2Login()
