@@ -18,11 +18,6 @@ public class MemberService {
         return new MemberResponseDto(member);
     }
 
-    public MemberResponseDto saveMember(MemberRequestDto memberRequestDto) {
-        Member savedMember = memberRepository.save(memberRequestDto.toEntity());
-        return new MemberResponseDto(savedMember);
-    }
-
     public MemberResponseDto findById(Long id) {
         Member findMember = memberRepository.findById(id).orElse(null);
         return new MemberResponseDto(findMember);

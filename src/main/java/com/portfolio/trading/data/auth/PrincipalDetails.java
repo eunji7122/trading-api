@@ -42,7 +42,8 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getUsername() {
-        return member.getUsername();
+        // username이 아닌 email 반환
+        return member.getEmail();
     }
 
     @Override
