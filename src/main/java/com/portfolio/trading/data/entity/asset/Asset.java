@@ -1,4 +1,4 @@
-package com.portfolio.trading.data.entity.coin;
+package com.portfolio.trading.data.entity.asset;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Table
-public class Coin {
+public class Asset {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +19,7 @@ public class Coin {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false)
-    private int lastPrice;
+    @Column(nullable = false, unique = true)
+    private String symbol;
 
 }

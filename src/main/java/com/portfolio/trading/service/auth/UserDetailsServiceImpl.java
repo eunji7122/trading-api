@@ -1,4 +1,4 @@
-package com.portfolio.trading.service.security;
+package com.portfolio.trading.service.auth;
 
 import com.portfolio.trading.data.auth.PrincipalDetails;
 import com.portfolio.trading.data.entity.member.Member;

@@ -1,9 +1,9 @@
-package com.portfolio.trading.data.entity.transaction;
+package com.portfolio.trading.data.entity.trading;
 
-import com.portfolio.trading.data.entity.coin.Coin;
 import com.portfolio.trading.data.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.*;
+
 
 @Entity
 @Getter
@@ -12,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Table
-public class Selling {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,13 +23,18 @@ public class Selling {
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "coin_id")
-    private Coin coin;
+    @JoinColumn(name = "trading_pair_id")
+    private TradingPair tradingPair;
+
+    @Enumerated(EnumType.STRING)
+    private OrderType type;
 
     @Column(nullable = false)
-    private Long price;
+    private double price;
 
     @Column(nullable = false)
-    private Long amount;
+    private double amount;
 
+    @Column(nullable = false)
+    private double filledAmount;
 }

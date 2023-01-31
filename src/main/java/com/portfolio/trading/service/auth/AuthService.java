@@ -1,4 +1,4 @@
-package com.portfolio.trading.service.security;
+package com.portfolio.trading.service.auth;
 
 import com.portfolio.trading.config.security.JwtTokenProvider;
 import com.portfolio.trading.data.dto.jwt.TokenDto;
@@ -16,14 +16,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class SignService {
+public class AuthService {
 
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public TokenDto signIn(MemberSigninRequestDto memberSigninRequestDto) {
+    public TokenDto createToken(MemberSigninRequestDto memberSigninRequestDto) {
 
         Member member = memberRepository.findByEmail(memberSigninRequestDto.getEmail()).orElse(null);
 
@@ -42,18 +42,11 @@ public class SignService {
         return tokenDto;
     }
 
-    public Member signup(MemberSignupRequestDto memberSignupRequestDto) {
+    public Member createMember(MemberSignupRequestDto memberSignupRequestDto) {
         if (memberRepository.findByEmail(memberSignupRequestDto.getEmail()).isPresent()) {
             throw new RuntimeException();
         }
         return memberRepository.save(memberSignupRequestDto.toEntity(bCryptPasswordEncoder));
-    }
-
-    public Member socialSignup(MemberSignupRequestDto memberSignupRequestDto) {
-        if (memberRepository.findByEmailAndProvider(memberSignupRequestDto.getEmail(), memberSignupRequestDto.getProvider()).isPresent()) {
-            throw new RuntimeException();
-        }
-        return memberRepository.save(memberSignupRequestDto.toEntity());
     }
 
     public TokenDto tokenReissue(TokenRequestDto tokenRequestDto) {

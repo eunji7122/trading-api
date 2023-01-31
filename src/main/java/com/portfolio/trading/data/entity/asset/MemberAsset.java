@@ -1,4 +1,4 @@
-package com.portfolio.trading.data.entity.coin;
+package com.portfolio.trading.data.entity.asset;
 
 import com.portfolio.trading.data.entity.member.Member;
 import jakarta.persistence.*;
@@ -11,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Table
-public class MemberCoin {
+public class MemberAsset {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,12 +23,12 @@ public class MemberCoin {
 
     @ManyToOne
     @JoinColumn(name = "coin_id")
-    private Coin coin;
+    private Asset asset;
 
     @Column(nullable = false)
-    private int amount;
+    private double amount;
 
     @Column(nullable = false)
-    private int averagePurchasedPrice;
+    private double averagePurchasedPrice;
 
 }
