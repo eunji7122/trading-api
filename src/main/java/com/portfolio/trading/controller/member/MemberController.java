@@ -20,11 +20,10 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
-    private final AuthService authService;
 
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<MemberResponseDto> createMember(@RequestBody MemberSignupRequestDto memberSignupRequestDto) {
-        Member member = authService.createMember(memberSignupRequestDto);
+        Member member = memberService.createMember(memberSignupRequestDto);
         MemberResponseDto memberResponseDto = new MemberResponseDto(member);
         return ResponseEntity.status(HttpStatus.OK).body(memberResponseDto);
     }

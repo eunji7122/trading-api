@@ -16,22 +16,22 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/asset")
+@RequestMapping("/assets")
 public class AssetController {
 
     private final AssetService assetService;
 
-    @GetMapping()
-    public ResponseEntity<AssetResponseDto> getAssetByName(@RequestParam String name) {
+    @GetMapping("/{name}")
+    public ResponseEntity<AssetResponseDto> getAssetByName(@PathVariable String name) {
         return ResponseEntity.status(HttpStatus.OK).body(assetService.getAsset(name));
     }
 
-    @GetMapping("/list")
+    @GetMapping()
     public ResponseEntity<List<AssetResponseDto>> getAssets() {
         return ResponseEntity.status(HttpStatus.OK).body(assetService.findAll());
     }
 
-    @PostMapping("/new")
+    @PostMapping()
     public ResponseEntity<AssetResponseDto> saveAsset(@RequestBody AssetRequestDto assetRequestDto) {
         return ResponseEntity.status(HttpStatus.OK).body(assetService.saveAsset(assetRequestDto));
     }

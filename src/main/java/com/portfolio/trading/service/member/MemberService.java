@@ -17,13 +17,12 @@ public class MemberService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
-//    public Member createMember(MemberSignupRequestDto memberSignupRequestDto) {
-//        if (memberRepository.findByEmail(memberSignupRequestDto.getEmail()).isPresent()) {
-//            throw new RuntimeException();
-//        }
-//        return memberRepository.save(memberSignupRequestDto.toEntity(bCryptPasswordEncoder));
-//    }
+    public Member createMember(MemberSignupRequestDto memberSignupRequestDto) {
+        if (memberRepository.findByEmail(memberSignupRequestDto.getEmail()).isPresent()) {
+            throw new RuntimeException();
+        }
+        return memberRepository.save(memberSignupRequestDto.toEntity(bCryptPasswordEncoder));
+    }
 
     public MemberResponseDto getMember(Long id) {
         Member member = memberRepository.getReferenceById(id);

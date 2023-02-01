@@ -42,13 +42,6 @@ public class AuthService {
         return tokenDto;
     }
 
-    public Member createMember(MemberSignupRequestDto memberSignupRequestDto) {
-        if (memberRepository.findByEmail(memberSignupRequestDto.getEmail()).isPresent()) {
-            throw new RuntimeException();
-        }
-        return memberRepository.save(memberSignupRequestDto.toEntity(bCryptPasswordEncoder));
-    }
-
     public TokenDto tokenReissue(TokenRequestDto tokenRequestDto) {
         // refresh token 만료 검사
         if (!jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
