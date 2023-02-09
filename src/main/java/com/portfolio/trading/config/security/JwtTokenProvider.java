@@ -23,7 +23,7 @@ public class JwtTokenProvider {
 
     private final UserDetailsService userDetailsService;
 
-    @Value("{springboot.jwt.secret")
+    @Value("{springboot.jwt.secret}")
     private String secretKey = "secretKey";
     private final long accessTokenValidMillisecond = 1000L * 60 * 60;
     private final Long refreshTokenValidMillisecond = 14 * 24 * 60 * 60 * 1000L;
@@ -63,6 +63,9 @@ public class JwtTokenProvider {
     // 토큰 인증 정보 조회
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUsername(token));
+        if (userDetails == null) {
+            return null;
+        }
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 

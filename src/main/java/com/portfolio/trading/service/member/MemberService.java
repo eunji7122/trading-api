@@ -1,9 +1,10 @@
 package com.portfolio.trading.service.member;
 
-import com.portfolio.trading.data.dto.member.MemberRequestDto;
 import com.portfolio.trading.data.dto.member.MemberResponseDto;
-import com.portfolio.trading.data.dto.member.MemberSignupRequestDto;
+import com.portfolio.trading.data.dto.member.CreateMemberRequestDto;
+import com.portfolio.trading.data.dto.member.UpdateMemberRequestDto;
 import com.portfolio.trading.data.entity.member.Member;
+import com.portfolio.trading.data.entity.member.Role;
 import com.portfolio.trading.data.repository.member.MemberRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,11 +18,17 @@ public class MemberService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Member createMember(MemberSignupRequestDto memberSignupRequestDto) {
-        if (memberRepository.findByEmail(memberSignupRequestDto.getEmail()).isPresent()) {
+    public MemberResponseDto createMember(CreateMemberRequestDto createMemberRequestDto) {
+        if (memberRepository.findByEmail(createMemberRequestDto.getEmail()).isPresent()) {
             throw new RuntimeException();
         }
-        return memberRepository.save(memberSignupRequestDto.toEntity(bCryptPasswordEncoder));
+        Member newMember = Member.builder()
+                .email(createMemberRequestDto.getEmail())
+                .password(bCryptPasswordEncoder.encode(createMemberRequestDto.getPassword()))
+                .username(createMemberRequestDto.getUsername())
+                .role(Role.USER)
+                .build();
+        return new MemberResponseDto(memberRepository.save(newMember));
     }
 
     public MemberResponseDto getMember(Long id) {
@@ -39,9 +46,14 @@ public class MemberService {
         return new MemberResponseDto(findMember);
     }
 
-    public MemberResponseDto updateMember(Long id, MemberRequestDto memberRequestDto) {
+    public Long getMemberId(String email) {
+        Member findMember = memberRepository.findByEmail(email).orElse(null);
+        return findMember.getId();
+    }
+
+    public MemberResponseDto updateMember(Long id, UpdateMemberRequestDto updateMemberRequestDto) {
         Member findMember = memberRepository.findById(id).orElse(null);
-        findMember.setUsername(memberRequestDto.getUsername());
+        findMember.setUsername(updateMemberRequestDto.getUsername());
         memberRepository.save(findMember);
 
         return new MemberResponseDto(findMember);

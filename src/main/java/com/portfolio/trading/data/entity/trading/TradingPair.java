@@ -18,12 +18,12 @@ public class TradingPair {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "coin1_id")
-    private Asset asset1;
+    @JoinColumn(name = "base_asset_id")
+    private Asset baseAsset;
 
     @ManyToOne
-    @JoinColumn(name = "coin2_id")
-    private Asset asset2;
+    @JoinColumn(name = "quote_asset2_id")
+    private Asset quoteAsset;
 
     @Column(nullable = false)
     private double lastPrice;

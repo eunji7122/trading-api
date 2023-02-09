@@ -15,6 +15,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private final String TOKEN_PREFIX = "Bearer";
+
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
@@ -24,13 +26,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Authentication authentication = jwtTokenProvider.getAuthentication(parseToken(token));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-
         filterChain.doFilter(request, response);
     }
 
     private String parseToken(String token) {
         // 토큰 정보에서 토큰 타입(Bearer) 제외하고 추출
-        String[] array = token.split(" ");
-        return array[1];
+        if (token.startsWith(TOKEN_PREFIX)) {
+            return token.substring(TOKEN_PREFIX.length()).trim();
+        }
+        return token;
     }
 }

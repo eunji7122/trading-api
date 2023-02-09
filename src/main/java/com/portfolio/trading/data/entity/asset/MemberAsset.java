@@ -22,7 +22,7 @@ public class MemberAsset {
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "coin_id")
+    @JoinColumn(name = "asset_id")
     private Asset asset;
 
     @Column(nullable = false)
@@ -30,5 +30,4 @@ public class MemberAsset {
 
     @Column(nullable = false)
     private double averagePurchasedPrice;
-
 }

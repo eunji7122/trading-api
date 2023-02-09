@@ -1,10 +1,9 @@
 package com.portfolio.trading.controller.member;
 
 import com.portfolio.trading.data.dto.member.MemberResponseDto;
-import com.portfolio.trading.data.dto.member.MemberSignupRequestDto;
+import com.portfolio.trading.data.dto.member.CreateMemberRequestDto;
 import com.portfolio.trading.data.entity.member.Member;
 import com.portfolio.trading.service.member.MemberService;
-import com.portfolio.trading.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,9 +21,8 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping()
-    public ResponseEntity<MemberResponseDto> createMember(@RequestBody MemberSignupRequestDto memberSignupRequestDto) {
-        Member member = memberService.createMember(memberSignupRequestDto);
-        MemberResponseDto memberResponseDto = new MemberResponseDto(member);
+    public ResponseEntity<MemberResponseDto> createMember(@RequestBody CreateMemberRequestDto createMemberRequestDto) {
+        MemberResponseDto memberResponseDto = memberService.createMember(createMemberRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(memberResponseDto);
     }
 

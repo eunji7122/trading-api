@@ -8,15 +8,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MemberSigninRequestDto {
+public class CreateTokenRequestDto {
 
     private String email;
     private String password;
 
-    public Member toMember(BCryptPasswordEncoder bCryptPasswordEncoder) {
-        return Member.builder()
-                .email(email)
-                .password(bCryptPasswordEncoder.encode(password))
-                .build();
-    }
 }

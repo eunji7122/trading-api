@@ -3,8 +3,7 @@ package com.portfolio.trading.service.auth;
 import com.portfolio.trading.config.security.JwtTokenProvider;
 import com.portfolio.trading.data.dto.jwt.TokenDto;
 import com.portfolio.trading.data.dto.jwt.TokenRequestDto;
-import com.portfolio.trading.data.dto.member.MemberSigninRequestDto;
-import com.portfolio.trading.data.dto.member.MemberSignupRequestDto;
+import com.portfolio.trading.data.dto.member.CreateTokenRequestDto;
 import com.portfolio.trading.data.entity.member.Member;
 import com.portfolio.trading.data.entity.security.RefreshToken;
 import com.portfolio.trading.data.repository.member.MemberRepository;
@@ -23,11 +22,11 @@ public class AuthService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public TokenDto createToken(MemberSigninRequestDto memberSigninRequestDto) {
+    public TokenDto createToken(CreateTokenRequestDto createTokenRequestDto) {
 
-        Member member = memberRepository.findByEmail(memberSigninRequestDto.getEmail()).orElse(null);
+        Member member = memberRepository.findByEmail(createTokenRequestDto.getEmail()).orElse(null);
 
-        if (!bCryptPasswordEncoder.matches(memberSigninRequestDto.getPassword(), member.getPassword())) {
+        if (!bCryptPasswordEncoder.matches(createTokenRequestDto.getPassword(), member.getPassword())) {
             throw new RuntimeException();
         }
 

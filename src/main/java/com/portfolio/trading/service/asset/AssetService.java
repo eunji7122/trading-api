@@ -1,6 +1,6 @@
 package com.portfolio.trading.service.asset;
 
-import com.portfolio.trading.data.dto.asset.AssetRequestDto;
+import com.portfolio.trading.data.dto.asset.CreateAssetRequestDto;
 import com.portfolio.trading.data.dto.asset.AssetResponseDto;
 import com.portfolio.trading.data.entity.asset.Asset;
 import com.portfolio.trading.data.repository.asset.AssetRepository;
@@ -20,8 +20,17 @@ public class AssetService {
         return new AssetResponseDto(asset);
     }
 
-    public AssetResponseDto saveAsset(AssetRequestDto assetRequestDto) {
-        Asset savedAsset = assetRepository.save(assetRequestDto.toEntity());
+    public AssetResponseDto createAsset(CreateAssetRequestDto createAssetRequestDto) {
+        if (assetRepository.findByName(createAssetRequestDto.getName()).isPresent()) {
+            throw new RuntimeException();
+        }
+
+        Asset newAsset = Asset.builder()
+                .name(createAssetRequestDto.getName())
+                .symbol(createAssetRequestDto.getSymbol())
+                .build();
+
+        Asset savedAsset = assetRepository.save(newAsset);
         return new AssetResponseDto(savedAsset);
     }
 

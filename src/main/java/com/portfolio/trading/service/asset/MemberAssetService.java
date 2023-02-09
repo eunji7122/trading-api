@@ -1,13 +1,17 @@
 package com.portfolio.trading.service.asset;
 
-import com.portfolio.trading.data.dto.asset.MemberAssetRequestDto;
+import com.portfolio.trading.data.dto.asset.AddMemberAssetRequestDto;
 import com.portfolio.trading.data.dto.asset.MemberAssetResponseDto;
+import com.portfolio.trading.data.dto.asset.SubtractMemberAssetRequestDto;
+import com.portfolio.trading.data.entity.asset.Asset;
 import com.portfolio.trading.data.entity.asset.MemberAsset;
+import com.portfolio.trading.data.entity.member.Member;
 import com.portfolio.trading.data.repository.asset.MemberAssetRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -15,51 +19,58 @@ public class MemberAssetService {
 
     private final MemberAssetRepository memberAssetRepository;
 
-    public MemberAssetResponseDto saveMemberCoin(MemberAssetRequestDto memberAssetRequestDto) {
-        MemberAsset savedMemberAsset = memberAssetRepository.save(memberAssetRequestDto.toEntity());
-        return new MemberAssetResponseDto(savedMemberAsset);
+    public MemberAssetResponseDto addMemberAsset(AddMemberAssetRequestDto addMemberAssetRequestDto) {
+        Optional<MemberAsset> optionalMemberAsset = memberAssetRepository.findAllByMemberIdAndAssetId(addMemberAssetRequestDto.getMemberId(), addMemberAssetRequestDto.getAssetId());
+        if (optionalMemberAsset.isPresent()) {
+            MemberAsset memberAsset = optionalMemberAsset.get();
+
+            if (addMemberAssetRequestDto.isUpdateAveragePurchasedPrice()) {
+                memberAsset.setAveragePurchasedPrice(
+                        (memberAsset.getAmount() * memberAsset.getAveragePurchasedPrice() + addMemberAssetRequestDto.getAmount() * addMemberAssetRequestDto.getAveragePurchasedPrice())
+                                / (memberAsset.getAmount() + addMemberAssetRequestDto.getAmount())
+                );
+            }
+
+            memberAsset.setAmount(memberAsset.getAmount() + addMemberAssetRequestDto.getAmount());
+            memberAssetRepository.save(memberAsset);
+            return new MemberAssetResponseDto(memberAsset);
+        } else {
+            // add
+            MemberAsset newMemberAsset = MemberAsset.builder()
+                    .member(Member.builder()
+                            .id(addMemberAssetRequestDto.getMemberId()).build())
+                    .asset(Asset.builder().id(addMemberAssetRequestDto.getAssetId()).build())
+                    .amount(addMemberAssetRequestDto.getAmount())
+                    .averagePurchasedPrice(addMemberAssetRequestDto.isUpdateAveragePurchasedPrice()
+                            ? addMemberAssetRequestDto.getAveragePurchasedPrice() : 0)
+                    .build();
+            memberAssetRepository.save(newMemberAsset);
+            return new MemberAssetResponseDto(newMemberAsset);
+        }
+    }
+
+    public MemberAssetResponseDto subtractMemberAsset(SubtractMemberAssetRequestDto subtractMemberAssetRequestDto) {
+        Optional<MemberAsset> optionalMemberAsset = memberAssetRepository.findAllByMemberIdAndAssetId(subtractMemberAssetRequestDto.getMemberId(), subtractMemberAssetRequestDto.getAssetId());
+        if (optionalMemberAsset.isEmpty()) {
+            throw new RuntimeException();
+        } else {
+            MemberAsset memberAsset = optionalMemberAsset.get();
+            double amount = memberAsset.getAmount() - subtractMemberAssetRequestDto.getAmount();
+            if (amount < 0) {
+                throw new RuntimeException();
+            }
+            memberAsset.setAmount(amount);
+            memberAssetRepository.save(memberAsset);
+            return new MemberAssetResponseDto(memberAsset);
+        }
     }
 
     public List<MemberAssetResponseDto> findAllByMemberId(Long memberId) {
         return memberAssetRepository.findAllByMemberId(memberId).stream().map(MemberAssetResponseDto::new).toList();
     }
 
-    public MemberAssetResponseDto updateMemberCoinByBuying(Long id, MemberAssetRequestDto memberAssetRequestDto) {
-        MemberAsset foundMemberAsset = memberAssetRepository.findById(id).orElse(null);
-        foundMemberAsset.setAmount(CalculateAmountByBuying(foundMemberAsset, memberAssetRequestDto));
-        foundMemberAsset.setAveragePurchasedPrice(CalculateAveragePurchasedPriceByBuying(foundMemberAsset, memberAssetRequestDto));
-        MemberAsset updatedMemberAsset = memberAssetRepository.save(foundMemberAsset);
-
-        return new MemberAssetResponseDto(updatedMemberAsset);
-    }
-
-    public MemberAssetResponseDto updateMemberCoinBySelling(Long id, MemberAssetRequestDto memberAssetRequestDto) {
-        MemberAsset foundMemberAsset = memberAssetRepository.findById(id).orElse(null);
-        foundMemberAsset.setAmount(CalculateAmountBySelling(foundMemberAsset, memberAssetRequestDto));
-        MemberAsset updatedMemberAsset = memberAssetRepository.save(foundMemberAsset);
-
-        return new MemberAssetResponseDto(updatedMemberAsset);
-    }
-
-    public Long deleteMemberCoin(Long id) {
-        memberAssetRepository.deleteById(id);
-        return id;
-    }
-
-    private double CalculateAmountByBuying(MemberAsset memberAsset, MemberAssetRequestDto memberAssetRequestDto) {
-        // 매수 시, 총 수량 계산
-        return memberAsset.getAmount() + memberAssetRequestDto.getAmount();
-    }
-
-    private double CalculateAmountBySelling(MemberAsset memberAsset, MemberAssetRequestDto memberAssetRequestDto) {
-        // 매도 시, 총 수량 계산
-        return memberAsset.getAmount() - memberAssetRequestDto.getAmount();
-    }
-
-    private double CalculateAveragePurchasedPriceByBuying(MemberAsset memberAsset, MemberAssetRequestDto memberAssetRequestDto) {
-        // 매수 시, 매수평균가 계산
-        return (memberAsset.getAmount() * memberAsset.getAveragePurchasedPrice() + memberAssetRequestDto.getAmount() * memberAssetRequestDto.getAveragePurchasedPrice())
-                / (memberAsset.getAmount() + memberAssetRequestDto.getAmount());
+    public MemberAssetResponseDto findAllByMemberIdAndAssetId(Long memberId, Long assetId) {
+        return new MemberAssetResponseDto(memberAssetRepository.findAllByMemberIdAndAssetId(memberId, assetId).orElse(null));
     }
 
 }
