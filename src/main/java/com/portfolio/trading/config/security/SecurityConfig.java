@@ -40,7 +40,6 @@ public class SecurityConfig {
 
                 .and()
                 .oauth2Login()
-                .defaultSuccessUrl("/trading")
                 .failureUrl("/")
                 .userInfoEndpoint()
                 .userService(principalOAuth2UserService)

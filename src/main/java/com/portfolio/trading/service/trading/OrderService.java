@@ -64,6 +64,7 @@ public class OrderService {
                 }
                 transactionService.createTransaction(
                         new CreateTransactionRequestDto(buyerId, o.getMember().getId(), tradingPair, o.getPrice(), transactionAmount));
+                tradingPairService.updateLastPrice(tradingPair.getId(), o.getPrice());
             }
             if (amount > filledAmount) {
                 Order order = orderRepository.save(
@@ -102,6 +103,7 @@ public class OrderService {
                 }
                 transactionService.createTransaction(
                         new CreateTransactionRequestDto(sellerId, o.getMember().getId(), tradingPair, o.getPrice(), transactionAmount));
+                tradingPairService.updateLastPrice(tradingPair.getId(), o.getPrice());
             }
             if (amount > filledAmount) {
                 Order order = orderRepository.save(
