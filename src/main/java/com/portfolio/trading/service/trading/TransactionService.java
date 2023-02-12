@@ -12,6 +12,8 @@ import com.portfolio.trading.service.asset.MemberAssetService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class TransactionService {
@@ -53,5 +55,9 @@ public class TransactionService {
                 .price(createTransactionRequestDto.getPrice())
                 .amount(createTransactionRequestDto.getAmount())
                 .build()));
+    }
+
+    public List<TransactionResponseDto> findAll() {
+        return transactionRepository.findAll().stream().map(TransactionResponseDto::new).toList();
     }
 }
