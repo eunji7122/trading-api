@@ -1,5 +1,6 @@
 package com.portfolio.trading.data.entity.trading;
 
+import com.portfolio.trading.data.entity.base.BaseEntity;
 import com.portfolio.trading.data.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Table
-public class Transaction {
+public class Transaction extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

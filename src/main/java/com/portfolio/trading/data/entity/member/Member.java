@@ -1,6 +1,7 @@
 package com.portfolio.trading.data.entity.member;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.portfolio.trading.data.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Table
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

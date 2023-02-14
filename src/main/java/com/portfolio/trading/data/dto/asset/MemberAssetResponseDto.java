@@ -9,13 +9,13 @@ import lombok.Setter;
 public class MemberAssetResponseDto {
 
     private final Long id;
-    private final AssetResponseDto assetResponseDto;
+    private final AssetResponseDto asset;
     private final double amount;
     private final double averagePurchasedPrice;
 
     public MemberAssetResponseDto(MemberAsset memberAsset) {
         this.id = memberAsset.getId();
-        this.assetResponseDto = new AssetResponseDto(memberAsset.getAsset());
+        this.asset = new AssetResponseDto(memberAsset.getAsset());
         this.amount = memberAsset.getAmount();
         this.averagePurchasedPrice = memberAsset.getAveragePurchasedPrice();
     }
