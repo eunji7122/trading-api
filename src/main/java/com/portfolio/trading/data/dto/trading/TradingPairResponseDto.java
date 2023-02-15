@@ -11,11 +11,15 @@ public class TradingPairResponseDto {
     private final AssetResponseDto baseAsset;
     private final AssetResponseDto quoteAsset;
     private final double lastPrice;
+    private final double changeRate;
+    private final double tradingValue;
 
     public TradingPairResponseDto(TradingPair tradingPair) {
         this.id = tradingPair.getId();
         this.baseAsset = new AssetResponseDto(tradingPair.getBaseAsset());
         this.quoteAsset = new AssetResponseDto(tradingPair.getQuoteAsset());
         this.lastPrice = tradingPair.getLastPrice();
+        this.changeRate = tradingPair.getChangeRate();
+        this.tradingValue = tradingPair.getTradingValue();
     }
 }

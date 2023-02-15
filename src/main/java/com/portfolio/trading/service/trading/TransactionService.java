@@ -12,6 +12,7 @@ import com.portfolio.trading.service.asset.MemberAssetService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -59,5 +60,13 @@ public class TransactionService {
 
     public List<TransactionResponseDto> findAll() {
         return transactionRepository.findAll().stream().map(TransactionResponseDto::new).toList();
+    }
+
+    public List<TransactionResponseDto> findAllByUpdatedAtBetween(LocalDateTime startTime, LocalDateTime endTime) {
+        return transactionRepository.findAllByUpdatedAtBetween(startTime, endTime).stream().map(TransactionResponseDto::new).toList();
+    }
+
+    public List<TransactionResponseDto> findAllByUpdatedAtAfter(LocalDateTime today) {
+        return transactionRepository.findAllByUpdatedAtAfter(today).stream().map(TransactionResponseDto::new).toList();
     }
 }

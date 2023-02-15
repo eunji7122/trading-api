@@ -28,4 +28,12 @@ public class TradingPair extends BaseEntity {
 
     @Column(nullable = false)
     private double lastPrice;
+
+    // 전일대비(변동률)
+    @Column(nullable = false)
+    private double changeRate;
+
+    // 거래대금
+    @Column(nullable = false)
+    private double tradingValue;
 }
