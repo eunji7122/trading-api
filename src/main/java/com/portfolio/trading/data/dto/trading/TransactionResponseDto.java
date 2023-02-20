@@ -5,6 +5,8 @@ import com.portfolio.trading.data.entity.trading.TradingPair;
 import com.portfolio.trading.data.entity.trading.Transaction;
 import lombok.Getter;
 
+import java.time.format.DateTimeFormatter;
+
 @Getter
 public class TransactionResponseDto {
 
@@ -14,6 +16,7 @@ public class TransactionResponseDto {
     private final TradingPair tradingPair;
     private final double price;
     private final double amount;
+    private final String updatedAt;
 
     public TransactionResponseDto(Transaction transaction) {
         this.id = transaction.getId();
@@ -22,5 +25,7 @@ public class TransactionResponseDto {
         this.tradingPair = transaction.getTradingPair();
         this.price = transaction.getPrice();
         this.amount = transaction.getAmount();
+        this.updatedAt = transaction.getUpdatedAt().format(DateTimeFormatter.ofPattern("MM.dd hh:mm"));
+
     }
 }

@@ -2,6 +2,7 @@ package com.portfolio.trading.service.trading;
 
 import com.portfolio.trading.data.dto.asset.AddMemberAssetRequestDto;
 import com.portfolio.trading.data.dto.asset.SubtractMemberAssetRequestDto;
+import com.portfolio.trading.data.dto.trading.CandleDto;
 import com.portfolio.trading.data.dto.trading.CreateTransactionRequestDto;
 import com.portfolio.trading.data.dto.trading.TransactionResponseDto;
 import com.portfolio.trading.data.entity.member.Member;
@@ -62,11 +63,25 @@ public class TransactionService {
         return transactionRepository.findAll().stream().map(TransactionResponseDto::new).toList();
     }
 
+    public double getHighPriceByTradingPair(Long tradingPairId) {
+        List<TransactionResponseDto> transactions = transactionRepository.findByTradingPairIdOrderByPrice(tradingPairId).stream().map(TransactionResponseDto::new).toList();
+        return transactions.get(0).getPrice();
+    }
+
+    public double getLowPriceByTradingPair(Long tradingPairId) {
+        List<TransactionResponseDto> transactions = transactionRepository.findByTradingPairIdOrderByPrice(tradingPairId).stream().map(TransactionResponseDto::new).toList();
+        return transactions.get(transactions.size() - 1).getPrice();
+    }
+
     public List<TransactionResponseDto> findAllByUpdatedAtBetween(LocalDateTime startTime, LocalDateTime endTime) {
         return transactionRepository.findAllByUpdatedAtBetween(startTime, endTime).stream().map(TransactionResponseDto::new).toList();
     }
 
     public List<TransactionResponseDto> findAllByUpdatedAtAfter(LocalDateTime today) {
         return transactionRepository.findAllByUpdatedAtAfter(today).stream().map(TransactionResponseDto::new).toList();
+    }
+
+    public List<CandleDto> findCandleList(Long tradingPairId, LocalDateTime startTime, LocalDateTime endTime) {
+        return transactionRepository.findCandleList(tradingPairId, startTime, endTime);
     }
 }

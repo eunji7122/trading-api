@@ -52,7 +52,7 @@ public class TradingPairService {
         } else {
             double yesterdayLastPrice = transactions.get(transactions.size() - 1).getPrice();
             double changeRate = (tradingPair.getLastPrice() - yesterdayLastPrice) / yesterdayLastPrice * 100;
-            tradingPair.setChangeRate(changeRate);
+            tradingPair.setChangeRate(Math.round(changeRate * 100 / 100));
             tradingPairRepository.save(tradingPair);
         }
     }
