@@ -11,6 +11,7 @@ import com.portfolio.trading.data.entity.trading.Transaction;
 import com.portfolio.trading.data.repository.trading.TransactionRepository;
 import com.portfolio.trading.service.asset.MemberAssetService;
 import lombok.AllArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -63,13 +64,13 @@ public class TransactionService {
         return transactionRepository.findAll().stream().map(TransactionResponseDto::new).toList();
     }
 
-    public double getHighPriceByTradingPair(Long tradingPairId) {
-        List<TransactionResponseDto> transactions = transactionRepository.findByTradingPairIdOrderByPrice(tradingPairId).stream().map(TransactionResponseDto::new).toList();
+    public double getHighPriceAtTodayByTradingPair(Long tradingPairId, LocalDateTime today) {
+        List<TransactionResponseDto> transactions = transactionRepository.findByTradingPairIdAndUpdatedAtAfterOrderByPrice(tradingPairId, today).stream().map(TransactionResponseDto::new).toList();
         return transactions.get(0).getPrice();
     }
 
-    public double getLowPriceByTradingPair(Long tradingPairId) {
-        List<TransactionResponseDto> transactions = transactionRepository.findByTradingPairIdOrderByPrice(tradingPairId).stream().map(TransactionResponseDto::new).toList();
+    public double getLowPriceAtTodayByTradingPair(Long tradingPairId, LocalDateTime today) {
+        List<TransactionResponseDto> transactions = transactionRepository.findByTradingPairIdAndUpdatedAtAfterOrderByPrice(tradingPairId, today).stream().map(TransactionResponseDto::new).toList();
         return transactions.get(transactions.size() - 1).getPrice();
     }
 

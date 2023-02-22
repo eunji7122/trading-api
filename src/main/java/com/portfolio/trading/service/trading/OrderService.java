@@ -66,7 +66,10 @@ public class OrderService {
                         new CreateTransactionRequestDto(buyerId, o.getMember().getId(), tradingPair, o.getPrice(), transactionAmount));
                 tradingPairService.updateLastPrice(tradingPair.getId(), o.getPrice());
                 tradingPairService.updateChangeRate(tradingPair.getId());
+                tradingPairService.updateTradingAmount(tradingPair.getId());
                 tradingPairService.updateTradingValue(tradingPair.getId());
+                tradingPairService.updateHighestPrice(tradingPair.getId());
+                tradingPairService.updateLowestPrice(tradingPair.getId());
             }
             if (amount > filledAmount) {
                 Order order = orderRepository.save(
@@ -107,7 +110,10 @@ public class OrderService {
                         new CreateTransactionRequestDto(sellerId, o.getMember().getId(), tradingPair, o.getPrice(), transactionAmount));
                 tradingPairService.updateLastPrice(tradingPair.getId(), o.getPrice());
                 tradingPairService.updateChangeRate(tradingPair.getId());
+                tradingPairService.updateTradingAmount(tradingPair.getId());
                 tradingPairService.updateTradingValue(tradingPair.getId());
+                tradingPairService.updateHighestPrice(tradingPair.getId());
+                tradingPairService.updateLowestPrice(tradingPair.getId());
             }
             if (amount > filledAmount) {
                 Order order = orderRepository.save(

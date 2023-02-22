@@ -57,6 +57,19 @@ public class TradingPairService {
         }
     }
 
+    // 거래량 계산
+    public void updateTradingAmount(Long id) {
+        TradingPair tradingPair = tradingPairRepository.getReferenceById(id);
+        LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0, 0));
+        List<TransactionResponseDto> transactions = transactionService.findAllByUpdatedAtAfter(today);
+        double tradingAmount = 0;
+        for (TransactionResponseDto transaction : transactions) {
+            tradingAmount += transaction.getAmount();
+        }
+        tradingPair.setTradingAmount(tradingAmount);
+        tradingPairRepository.save(tradingPair);
+    }
+
     // 거래대금 계산
     public void updateTradingValue(Long id) {
         TradingPair tradingPair = tradingPairRepository.getReferenceById(id);
@@ -68,6 +81,26 @@ public class TradingPairService {
             tradingValue += transaction.getAmount() * transaction.getPrice();
         }
         tradingPair.setTradingValue(tradingValue);
+        tradingPairRepository.save(tradingPair);
+    }
+
+    // 당일 고가 계산
+    public void updateHighestPrice(Long id) {
+        TradingPair tradingPair = tradingPairRepository.getReferenceById(id);
+
+        LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0, 0));
+        double price = transactionService.getHighPriceAtTodayByTradingPair(id, today);
+        tradingPair.setHighestPrice(price);
+        tradingPairRepository.save(tradingPair);
+    }
+
+    // 당일 저가 계산
+    public void updateLowestPrice(Long id) {
+        TradingPair tradingPair = tradingPairRepository.getReferenceById(id);
+
+        LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0, 0));
+        double price = transactionService.getLowPriceAtTodayByTradingPair(id, today);
+        tradingPair.setLowestPrice(price);
         tradingPairRepository.save(tradingPair);
     }
 }

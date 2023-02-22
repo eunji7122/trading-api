@@ -36,4 +36,16 @@ public class TradingPair extends BaseEntity {
     // 거래대금
     @Column(nullable = false)
     private double tradingValue;
+
+    // 고가
+    @Column(nullable = false)
+    private double highestPrice;
+
+    // 저가
+    @Column(nullable = false)
+    private double lowestPrice;
+
+    // 거래량
+    @Column(nullable = false)
+    private double tradingAmount;
 }

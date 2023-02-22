@@ -12,7 +12,10 @@ public class TradingPairResponseDto {
     private final AssetResponseDto quoteAsset;
     private final double lastPrice;
     private final double changeRate;
+    private final double tradingAmount;
     private final double tradingValue;
+    private final double highestPrice;
+    private final double lowestPrice;
 
     public TradingPairResponseDto(TradingPair tradingPair) {
         this.id = tradingPair.getId();
@@ -21,5 +24,8 @@ public class TradingPairResponseDto {
         this.lastPrice = tradingPair.getLastPrice();
         this.changeRate = tradingPair.getChangeRate();
         this.tradingValue = tradingPair.getTradingValue();
+        this.highestPrice = tradingPair.getHighestPrice();
+        this.lowestPrice = tradingPair.getLowestPrice();
+        this.tradingAmount = tradingPair.getTradingAmount();
     }
 }

@@ -15,7 +15,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
 
     List<Transaction> findAllByUpdatedAtAfter(LocalDateTime today);
 
-    List<Transaction> findByTradingPairIdOrderByPrice(Long tradingPairId);
+    List<Transaction> findByTradingPairIdAndUpdatedAtAfterOrderByPrice(Long tradingPairId, LocalDateTime today);
 
     @Query(value = "SELECT DATE_TRUNC('day', T.created_at) as day, max(price) as highestPrice, min(price) lowestPrice FROM transaction T where trading_pair_id = :id AND T.created_at > :startTime AND T.created_at < :endTime GROUP BY day", nativeQuery = true)
     List<Map<String, Object>> findHighestAndLowestPricesByDay(@Param("id") Long tradingPairId, @Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
