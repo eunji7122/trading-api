@@ -107,7 +107,7 @@ public class OrderService {
                     orderRepository.save(o);
                 }
                 transactionService.createTransaction(
-                        new CreateTransactionRequestDto(sellerId, o.getMember().getId(), tradingPair, o.getPrice(), transactionAmount));
+                        new CreateTransactionRequestDto(o.getMember().getId(), sellerId, tradingPair, o.getPrice(), transactionAmount));
                 tradingPairService.updateLastPrice(tradingPair.getId(), o.getPrice());
                 tradingPairService.updateChangeRate(tradingPair.getId());
                 tradingPairService.updateTradingAmount(tradingPair.getId());

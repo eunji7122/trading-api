@@ -11,7 +11,6 @@ import com.portfolio.trading.data.entity.trading.Transaction;
 import com.portfolio.trading.data.repository.trading.TransactionRepository;
 import com.portfolio.trading.service.asset.MemberAssetService;
 import lombok.AllArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
