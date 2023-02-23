@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface MemberAssetRepository extends JpaRepository<MemberAsset, Long> {
 
-    List<MemberAsset> findAllByMemberId(Long memberId);
+    List<MemberAsset> findAllByMemberIdOrderById(Long memberId);
 
     Optional<MemberAsset> findAllByMemberIdAndAssetId(Long memberId, Long assetId);
 }
