@@ -1,9 +1,6 @@
 package com.portfolio.trading.service.asset;
 
-import com.portfolio.trading.data.dto.asset.AddMemberAssetRequestDto;
-import com.portfolio.trading.data.dto.asset.MemberAssetResponseDto;
-import com.portfolio.trading.data.dto.asset.MemberKrwAssetResponseDto;
-import com.portfolio.trading.data.dto.asset.SubtractMemberAssetRequestDto;
+import com.portfolio.trading.data.dto.asset.*;
 import com.portfolio.trading.data.dto.trading.TradingPairResponseDto;
 import com.portfolio.trading.data.entity.asset.Asset;
 import com.portfolio.trading.data.entity.asset.MemberAsset;
@@ -15,6 +12,7 @@ import com.portfolio.trading.service.trading.TradingPairService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -111,4 +109,20 @@ public class MemberAssetService {
         return new MemberKrwAssetResponseDto(krwAmount, totalAmount, totalPurchasedPrice, totalEvaluationPrice, totalEvaluationProfitAndLoss, totalEvaluationRate);
     }
 
+    public List<MemberAssetDetailResponseDto> getMemberAssetDetail(Long memberId) {
+        List<MemberAssetResponseDto> memberAssets = memberAssetRepository.findAllByMemberIdOrderById(memberId).stream().map(MemberAssetResponseDto::new).toList();
+        memberAssets = memberAssets.stream().filter(memberAsset -> memberAsset.getAsset().getId() != 1).toList(); // 보유 자산 중 원화 제외
+        List<TradingPairResponseDto> tradingPairs = tradingPairRepository.findAll().stream().map(TradingPairResponseDto::new).toList();
+
+        List<MemberAssetDetailResponseDto> memberAssetDetails = new ArrayList<>();
+
+        for (int i = 0; i < memberAssets.size(); i++) {
+            double purchasedPrice = memberAssets.get(i).getAmount() * memberAssets.get(i).getAveragePurchasedPrice(); // 매수금액
+            double evaluationPrice = purchasedPrice * (tradingPairs.get(i).getLastPrice() / memberAssets.get(i).getAveragePurchasedPrice()); // 평가 금액
+            double evaluationRate = (1 - (evaluationPrice / purchasedPrice)) * 100; // 평가 손익
+            memberAssetDetails.add(new MemberAssetDetailResponseDto(memberAssets.get(i), purchasedPrice, evaluationPrice, evaluationRate));
+        }
+
+        return memberAssetDetails;
+    }
 }

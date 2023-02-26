@@ -1,5 +1,6 @@
 package com.portfolio.trading.controller.asset;
 
+import com.portfolio.trading.data.dto.asset.MemberAssetDetailResponseDto;
 import com.portfolio.trading.data.dto.asset.MemberAssetResponseDto;
 import com.portfolio.trading.data.dto.asset.MemberKrwAssetResponseDto;
 import com.portfolio.trading.data.dto.member.MemberResponseDto;
@@ -38,6 +39,13 @@ public class MemberAssetController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         MemberResponseDto member = memberService.findByEmail(userDetails.getUsername());
         return ResponseEntity.status(HttpStatus.OK).body(memberAssetService.getMemberKrwAsset(member.getId()));
+    }
+
+    @GetMapping("/details")
+    public ResponseEntity<List<MemberAssetDetailResponseDto>> getMemberAssetDetails(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        MemberResponseDto member = memberService.findByEmail(userDetails.getUsername());
+        return ResponseEntity.status(HttpStatus.OK).body(memberAssetService.getMemberAssetDetail(member.getId()));
     }
 
 }

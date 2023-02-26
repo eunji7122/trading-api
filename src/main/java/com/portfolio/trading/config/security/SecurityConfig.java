@@ -36,7 +36,7 @@ public class SecurityConfig {
 
                 .and()
                 .authorizeHttpRequests() // 리퀘스트에 대한 사용권한 체크
-                .requestMatchers("/auth/**", "/members**", "**exception**", "/tradingPairs", "/transactions").permitAll()
+                .requestMatchers("/auth/**", "/members/**", "/tradingPairs/**", "/transactions/**", "**exception**").permitAll()
                 .anyRequest().authenticated() // 그 외 모든 요청은 인증과정 필요
 
                 .and()
