@@ -131,4 +131,8 @@ public class OrderService {
 
         return null;
     }
+
+    public List<OrderResponseDto> findAllByMemberId(Long memberId) {
+        return orderRepository.findAllByMemberIdOrderById(memberId).stream().map(OrderResponseDto::new).toList();
+    }
 }

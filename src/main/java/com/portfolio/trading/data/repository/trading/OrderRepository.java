@@ -10,4 +10,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     List<Order> findByTypeAndPriceLessThanEqualOrderByPrice(OrderType type, double price);
     List<Order> findByTypeAndPriceGreaterThanEqualOrderByPrice(OrderType type, double price);
+    List<Order> findAllByMemberIdOrderById(Long memberId);
 }
