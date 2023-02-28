@@ -11,6 +11,8 @@ import java.util.Map;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long>, CustomTransactionRepository {
 
+    List<Transaction> findAllByOrderByIdDesc();
+    List<Transaction> findAllBySellerIdOrBuyerIdOrderByIdDesc(Long sellerId, Long buyerId);
     List<Transaction> findAllByUpdatedAtBetween(LocalDateTime startTime, LocalDateTime endTime);
 
     List<Transaction> findAllByUpdatedAtAfter(LocalDateTime today);

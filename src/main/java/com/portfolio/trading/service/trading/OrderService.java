@@ -133,6 +133,6 @@ public class OrderService {
     }
 
     public List<OrderResponseDto> findAllByMemberId(Long memberId) {
-        return orderRepository.findAllByMemberIdOrderById(memberId).stream().map(OrderResponseDto::new).toList();
+        return orderRepository.findAllByMemberIdOrderByIdDesc(memberId).stream().map(OrderResponseDto::new).toList();
     }
 }

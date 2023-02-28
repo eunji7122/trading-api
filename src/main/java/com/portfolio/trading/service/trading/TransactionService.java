@@ -60,7 +60,11 @@ public class TransactionService {
     }
 
     public List<TransactionResponseDto> findAll() {
-        return transactionRepository.findAll().stream().map(TransactionResponseDto::new).toList();
+        return transactionRepository.findAllByOrderByIdDesc().stream().map(TransactionResponseDto::new).toList();
+    }
+
+    public List<TransactionResponseDto> findAllByMemberId(Long memberId) {
+        return transactionRepository.findAllBySellerIdOrBuyerIdOrderByIdDesc(memberId, memberId).stream().map(TransactionResponseDto::new).toList();
     }
 
     public double getHighPriceAtTodayByTradingPair(Long tradingPairId, LocalDateTime today) {

@@ -26,6 +26,5 @@ public class TransactionResponseDto {
         this.price = transaction.getPrice();
         this.amount = transaction.getAmount();
         this.updatedAt = transaction.getUpdatedAt().format(DateTimeFormatter.ofPattern("MM.dd hh:mm"));
-
     }
 }

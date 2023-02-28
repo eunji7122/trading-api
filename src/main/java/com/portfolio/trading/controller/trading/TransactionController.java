@@ -1,7 +1,9 @@
 package com.portfolio.trading.controller.trading;
 
+import com.portfolio.trading.data.dto.member.MemberResponseDto;
 import com.portfolio.trading.data.dto.trading.CandleDto;
 import com.portfolio.trading.data.dto.trading.TransactionResponseDto;
+import com.portfolio.trading.service.member.MemberService;
 import com.portfolio.trading.service.trading.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +11,8 @@ import org.springframework.cglib.core.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,10 +29,18 @@ import java.util.List;
 public class TransactionController {
 
     private final TransactionService transactionService;
+    private final MemberService memberService;
 
     @GetMapping
     public ResponseEntity<List<TransactionResponseDto>> getTransactions() {
         return ResponseEntity.status(HttpStatus.OK).body(transactionService.findAll());
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<List<TransactionResponseDto>> getTransactions(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        MemberResponseDto member = memberService.findByEmail(userDetails.getUsername());
+        return ResponseEntity.status(HttpStatus.OK).body(transactionService.findAllByMemberId(member.getId()));
     }
 
 //    @GetMapping("/candle-list")
