@@ -5,10 +5,8 @@ import com.portfolio.trading.data.dto.trading.TradingPairResponseDto;
 import com.portfolio.trading.data.entity.asset.Asset;
 import com.portfolio.trading.data.entity.asset.MemberAsset;
 import com.portfolio.trading.data.entity.member.Member;
-import com.portfolio.trading.data.entity.trading.Order;
 import com.portfolio.trading.data.repository.asset.MemberAssetRepository;
 import com.portfolio.trading.data.repository.trading.TradingPairRepository;
-import com.portfolio.trading.service.trading.TradingPairService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -104,7 +102,7 @@ public class MemberAssetService {
 
         totalAmount = totalEvaluationPrice + krwAsset.getAmount();
         totalEvaluationProfitAndLoss = totalEvaluationPrice - totalPurchasedPrice;
-        totalEvaluationRate = (1 - (totalEvaluationPrice / totalPurchasedPrice)) * 100;
+        totalEvaluationRate = totalEvaluationProfitAndLoss / totalPurchasedPrice * 100;
 
         return new MemberKrwAssetResponseDto(krwAmount, totalAmount, totalPurchasedPrice, totalEvaluationPrice, totalEvaluationProfitAndLoss, totalEvaluationRate);
     }
@@ -119,7 +117,7 @@ public class MemberAssetService {
         for (int i = 0; i < memberAssets.size(); i++) {
             double purchasedPrice = memberAssets.get(i).getAmount() * memberAssets.get(i).getAveragePurchasedPrice(); // 매수금액
             double evaluationPrice = purchasedPrice * (tradingPairs.get(i).getLastPrice() / memberAssets.get(i).getAveragePurchasedPrice()); // 평가 금액
-            double evaluationRate = (1 - (evaluationPrice / purchasedPrice)) * 100; // 평가 손익
+            double evaluationRate = (evaluationPrice - purchasedPrice) / purchasedPrice * 100; // 평가 손익
             memberAssetDetails.add(new MemberAssetDetailResponseDto(memberAssets.get(i), purchasedPrice, evaluationPrice, evaluationRate));
         }
 
