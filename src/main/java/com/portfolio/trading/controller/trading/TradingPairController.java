@@ -20,6 +20,6 @@ public class TradingPairController {
 
     @GetMapping()
     public ResponseEntity<List<TradingPairResponseDto>> getTradingPairs() {
-        return ResponseEntity.status(HttpStatus.OK).body(tradingPairService.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(tradingPairService.findAllOrderById());
     }
 }

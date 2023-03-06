@@ -20,8 +20,8 @@ public class TradingPairService {
     private final TradingPairRepository tradingPairRepository;
     private final TransactionService transactionService;
 
-    public List<TradingPairResponseDto> findAll() {
-        return tradingPairRepository.findAll().stream().map(TradingPairResponseDto::new).toList();
+    public List<TradingPairResponseDto> findAllOrderById() {
+        return tradingPairRepository.findAllByOrderById().stream().map(TradingPairResponseDto::new).toList();
     }
 
     public TradingPairResponseDto findById(Long id) {

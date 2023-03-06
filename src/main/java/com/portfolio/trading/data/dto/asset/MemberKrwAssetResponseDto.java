@@ -13,11 +13,15 @@ public class MemberKrwAssetResponseDto {
     private final double totalEvaluationRate; // 총 평가 수익률
 
     public MemberKrwAssetResponseDto(double krwAmount, double totalAmount, double totalPurchasedPrice, double totalEvaluationPrice, double totalEvaluationProfitAndLoss, double totalEvaluationRate) {
-        this.krwAmount = krwAmount;
-        this.totalAmount = totalAmount;
-        this.totalPurchasedPrice = totalPurchasedPrice;
-        this.totalEvaluationPrice = totalEvaluationPrice;
-        this.totalEvaluationProfitAndLoss = totalEvaluationProfitAndLoss;
-        this.totalEvaluationRate = totalEvaluationRate;
+        this.krwAmount = RoundValue(krwAmount);
+        this.totalAmount = RoundValue(totalAmount);
+        this.totalPurchasedPrice = RoundValue(totalPurchasedPrice);
+        this.totalEvaluationPrice = RoundValue(totalEvaluationPrice);
+        this.totalEvaluationProfitAndLoss = RoundValue(totalEvaluationProfitAndLoss);
+        this.totalEvaluationRate = RoundValue(totalEvaluationRate);
+    }
+
+    private double RoundValue(double value) {
+        return Math.round(value * 100000) / 100000.0;
     }
 }

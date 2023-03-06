@@ -16,10 +16,14 @@ public class MemberAssetDetailResponseDto {
     public MemberAssetDetailResponseDto(MemberAssetResponseDto MemberAssetResponseDto, double purchasedPrice, double evaluationPrice, double evaluationRate) {
         this.id = MemberAssetResponseDto.getId();
         this.asset = MemberAssetResponseDto.getAsset();
-        this.amount = MemberAssetResponseDto.getAmount();
-        this.averagePurchasedPrice = MemberAssetResponseDto.getAveragePurchasedPrice();
-        this.purchasedPrice = purchasedPrice;
-        this.evaluationPrice = evaluationPrice;
-        this.evaluationRate = evaluationRate;
+        this.amount = RoundValue(MemberAssetResponseDto.getAmount());
+        this.averagePurchasedPrice = RoundValue(MemberAssetResponseDto.getAveragePurchasedPrice());
+        this.purchasedPrice = RoundValue(purchasedPrice);
+        this.evaluationPrice = RoundValue(evaluationPrice);
+        this.evaluationRate = RoundValue(evaluationRate);
+    }
+
+    private double RoundValue(double value) {
+        return Math.round(value * 100000) / 100000.0;
     }
 }

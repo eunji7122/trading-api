@@ -79,7 +79,7 @@ public class MemberAssetService {
     public MemberKrwAssetResponseDto getMemberKrwAsset(Long memberId) {
         List<MemberAssetResponseDto> memberAssets = memberAssetRepository.findAllByMemberIdOrderById(memberId).stream().map(MemberAssetResponseDto::new).toList();
 //        memberAssets.sort((MemberAssetResponseDto memberAsset1, MemberAssetResponseDto memberAsset2) -> memberAsset1.getId() <= memberAsset2.getId() ? -1 : 1);
-        List<TradingPairResponseDto> tradingPairs = tradingPairRepository.findAll().stream().map(TradingPairResponseDto::new).toList();
+        List<TradingPairResponseDto> tradingPairs = tradingPairRepository.findAllByOrderById().stream().map(TradingPairResponseDto::new).toList();
 
         MemberAssetResponseDto krwAsset = memberAssets.stream().filter(memberAsset -> Objects.equals(memberAsset.getAsset().getSymbol(), "KRW")).findFirst().orElse(null);
         double krwAmount = krwAsset.getAmount(); // 보유 KRW
@@ -110,7 +110,7 @@ public class MemberAssetService {
     public List<MemberAssetDetailResponseDto> getMemberAssetDetail(Long memberId) {
         List<MemberAssetResponseDto> memberAssets = memberAssetRepository.findAllByMemberIdOrderById(memberId).stream().map(MemberAssetResponseDto::new).toList();
         memberAssets = memberAssets.stream().filter(memberAsset -> memberAsset.getAsset().getId() != 1).toList(); // 보유 자산 중 원화 제외
-        List<TradingPairResponseDto> tradingPairs = tradingPairRepository.findAll().stream().map(TradingPairResponseDto::new).toList();
+        List<TradingPairResponseDto> tradingPairs = tradingPairRepository.findAllByOrderById().stream().map(TradingPairResponseDto::new).toList();
 
         List<MemberAssetDetailResponseDto> memberAssetDetails = new ArrayList<>();
 

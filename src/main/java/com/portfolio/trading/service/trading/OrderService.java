@@ -12,6 +12,7 @@ import com.portfolio.trading.data.repository.trading.OrderRepository;
 import com.portfolio.trading.data.repository.trading.TradingPairRepository;
 import com.portfolio.trading.service.asset.MemberAssetService;
 import com.portfolio.trading.service.member.MemberService;
+import com.portfolio.trading.service.socket.SocketService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,6 +32,7 @@ public class OrderService {
     private final TradingPairService tradingPairService;
     private final MemberRepository memberRepository;
     private final TradingPairRepository tradingPairRepository;
+    private final SocketService socketService;
 
     @Transactional
     public OrderResponseDto createOrder(OrderRequestDto orderRequestDto) {
@@ -70,6 +72,10 @@ public class OrderService {
                 tradingPairService.updateTradingValue(tradingPair.getId());
                 tradingPairService.updateHighestPrice(tradingPair.getId());
                 tradingPairService.updateLowestPrice(tradingPair.getId());
+
+                socketService.sendTradingPairs();
+                socketService.sendCandles(tradingPair.getId());
+
             }
             if (amount > filledAmount) {
                 Order order = orderRepository.save(
@@ -114,6 +120,9 @@ public class OrderService {
                 tradingPairService.updateTradingValue(tradingPair.getId());
                 tradingPairService.updateHighestPrice(tradingPair.getId());
                 tradingPairService.updateLowestPrice(tradingPair.getId());
+
+                socketService.sendTradingPairs();
+                socketService.sendCandles(tradingPair.getId());
             }
             if (amount > filledAmount) {
                 Order order = orderRepository.save(
@@ -135,4 +144,5 @@ public class OrderService {
     public List<OrderResponseDto> findAllByMemberId(Long memberId) {
         return orderRepository.findAllByMemberIdOrderByIdDesc(memberId).stream().map(OrderResponseDto::new).toList();
     }
+
 }
