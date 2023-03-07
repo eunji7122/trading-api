@@ -39,14 +39,14 @@ public class OrderController {
     }
 
     @GetMapping("/gathering/buy")
-    public ResponseEntity<List<OrderGatheringResponseDto>> getBuyOrderGathering() {
-        List<OrderGatheringResponseDto> orderGatherings = orderService.findPriceAndSumOfAmountGroupByPrice(OrderType.BUY);
+    public ResponseEntity<List<OrderGatheringResponseDto>> getBuyOrderGathering(@RequestParam Long tradingPairId) {
+        List<OrderGatheringResponseDto> orderGatherings = orderService.findPriceAndSumOfAmountGroupByPrice(OrderType.BUY, tradingPairId);
         return ResponseEntity.status(HttpStatus.OK).body(orderGatherings);
     }
 
     @GetMapping("/gathering/sell")
-    public ResponseEntity<List<OrderGatheringResponseDto>> getSellOrderGathering() {
-        List<OrderGatheringResponseDto> orderGatherings = orderService.findPriceAndSumOfAmountGroupByPrice(OrderType.SELL);
+    public ResponseEntity<List<OrderGatheringResponseDto>> getSellOrderGathering(@RequestParam Long tradingPairId) {
+        List<OrderGatheringResponseDto> orderGatherings = orderService.findPriceAndSumOfAmountGroupByPrice(OrderType.SELL, tradingPairId);
         return ResponseEntity.status(HttpStatus.OK).body(orderGatherings);
     }
 }

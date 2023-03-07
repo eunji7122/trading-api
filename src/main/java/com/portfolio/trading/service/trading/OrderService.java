@@ -144,8 +144,8 @@ public class OrderService {
         return orderRepository.findAllByMemberIdOrderByIdDesc(memberId).stream().map(OrderResponseDto::new).toList();
     }
 
-    public List<OrderGatheringResponseDto> findPriceAndSumOfAmountGroupByPrice(OrderType orderType) {
-        List<Map<String, Double>> orderGatherings = orderRepository.findPriceAndSumOfAmountByPrice(orderType.toString());
+    public List<OrderGatheringResponseDto> findPriceAndSumOfAmountGroupByPrice(OrderType orderType, Long tradingPairId) {
+        List<Map<String, Double>> orderGatherings = orderRepository.findPriceAndSumOfAmountByPrice(orderType.toString(), tradingPairId);
         List<OrderGatheringResponseDto> newOrderGatherings = new ArrayList<>();
         for (Map<String, Double> orderGathering : orderGatherings) {
             newOrderGatherings.add(new OrderGatheringResponseDto(orderGathering.get("price"), orderGathering.get("sum")));
