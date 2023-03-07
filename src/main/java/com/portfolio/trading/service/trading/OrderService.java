@@ -1,10 +1,7 @@
 package com.portfolio.trading.service.trading;
 
 import com.portfolio.trading.data.dto.asset.MemberAssetResponseDto;
-import com.portfolio.trading.data.dto.trading.CreateTransactionRequestDto;
-import com.portfolio.trading.data.dto.trading.OrderRequestDto;
-import com.portfolio.trading.data.dto.trading.OrderResponseDto;
-import com.portfolio.trading.data.dto.trading.TradingPairResponseDto;
+import com.portfolio.trading.data.dto.trading.*;
 import com.portfolio.trading.data.entity.trading.Order;
 import com.portfolio.trading.data.entity.trading.OrderType;
 import com.portfolio.trading.data.repository.member.MemberRepository;
@@ -19,7 +16,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -145,4 +144,12 @@ public class OrderService {
         return orderRepository.findAllByMemberIdOrderByIdDesc(memberId).stream().map(OrderResponseDto::new).toList();
     }
 
+    public List<OrderGatheringResponseDto> findPriceAndSumOfAmountGroupByPrice(OrderType orderType) {
+        List<Map<String, Double>> orderGatherings = orderRepository.findPriceAndSumOfAmountByPrice(orderType.toString());
+        List<OrderGatheringResponseDto> newOrderGatherings = new ArrayList<>();
+        for (Map<String, Double> orderGathering : orderGatherings) {
+            newOrderGatherings.add(new OrderGatheringResponseDto(orderGathering.get("price"), orderGathering.get("sum")));
+        }
+        return newOrderGatherings;
+    }
 }
