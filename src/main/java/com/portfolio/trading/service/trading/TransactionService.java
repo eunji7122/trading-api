@@ -60,7 +60,7 @@ public class TransactionService {
     }
 
     public List<TransactionResponseDto> findAll() {
-        return transactionRepository.findAllByOrderByIdDesc().stream().map(TransactionResponseDto::new).toList();
+        return transactionRepository.findAllByOrderByUpdatedAtDesc().stream().map(TransactionResponseDto::new).toList();
     }
 
     public List<TransactionResponseDto> findAllByMemberId(Long memberId) {
@@ -69,12 +69,12 @@ public class TransactionService {
 
     public double getHighPriceAtTodayByTradingPair(Long tradingPairId, LocalDateTime today) {
         List<TransactionResponseDto> transactions = transactionRepository.findByTradingPairIdAndUpdatedAtAfterOrderByPrice(tradingPairId, today).stream().map(TransactionResponseDto::new).toList();
-        return transactions.get(0).getPrice();
+        return transactions.get(transactions.size() - 1).getPrice();
     }
 
     public double getLowPriceAtTodayByTradingPair(Long tradingPairId, LocalDateTime today) {
         List<TransactionResponseDto> transactions = transactionRepository.findByTradingPairIdAndUpdatedAtAfterOrderByPrice(tradingPairId, today).stream().map(TransactionResponseDto::new).toList();
-        return transactions.get(transactions.size() - 1).getPrice();
+        return transactions.get(0).getPrice();
     }
 
     public List<TransactionResponseDto> findAllByUpdatedAtBetween(LocalDateTime startTime, LocalDateTime endTime) {

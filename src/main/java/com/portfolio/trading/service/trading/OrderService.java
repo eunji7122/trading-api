@@ -74,6 +74,7 @@ public class OrderService {
 
                 socketService.sendTradingPairs();
                 socketService.sendCandles(tradingPair.getId());
+                socketService.sendTransactions(tradingPair.getId());
 
             }
             if (amount > filledAmount) {
@@ -122,6 +123,7 @@ public class OrderService {
 
                 socketService.sendTradingPairs();
                 socketService.sendCandles(tradingPair.getId());
+                socketService.sendTransactions(tradingPair.getId());
             }
             if (amount > filledAmount) {
                 Order order = orderRepository.save(
