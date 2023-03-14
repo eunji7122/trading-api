@@ -7,8 +7,6 @@ import com.portfolio.trading.service.member.MemberService;
 import com.portfolio.trading.service.trading.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cglib.core.Local;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -32,8 +30,8 @@ public class TransactionController {
     private final MemberService memberService;
 
     @GetMapping
-    public ResponseEntity<List<TransactionResponseDto>> getTransactions() {
-        return ResponseEntity.status(HttpStatus.OK).body(transactionService.findAll());
+    public ResponseEntity<List<TransactionResponseDto>> getTransactions(@RequestParam Long tradingPairId) {
+        return ResponseEntity.status(HttpStatus.OK).body(transactionService.findAllByTradingPairId(tradingPairId));
     }
 
     @GetMapping("/me")

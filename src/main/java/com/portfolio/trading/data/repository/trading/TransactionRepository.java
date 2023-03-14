@@ -12,7 +12,7 @@ import java.util.Map;
 public interface TransactionRepository extends JpaRepository<Transaction, Long>, CustomTransactionRepository {
 
     List<Transaction> findAllByOrderByUpdatedAtDesc();
-    List<Transaction> findAllByTradingPairIdByOrderByUpdatedAtDesc(Long tradingPairId);
+    List<Transaction> findAllByTradingPairIdOrderByUpdatedAtDesc(Long tradingPairId);
     List<Transaction> findAllBySellerIdOrBuyerIdOrderByIdDesc(Long sellerId, Long buyerId);
     List<Transaction> findAllByUpdatedAtBetween(LocalDateTime startTime, LocalDateTime endTime);
 

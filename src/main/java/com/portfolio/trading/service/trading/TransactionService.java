@@ -67,6 +67,10 @@ public class TransactionService {
         return transactionRepository.findAllBySellerIdOrBuyerIdOrderByIdDesc(memberId, memberId).stream().map(TransactionResponseDto::new).toList();
     }
 
+    public List<TransactionResponseDto> findAllByTradingPairId(Long tradingPairId) {
+        return transactionRepository.findAllByTradingPairIdOrderByUpdatedAtDesc(tradingPairId).stream().map(TransactionResponseDto::new).toList();
+    }
+
     public double getHighPriceAtTodayByTradingPair(Long tradingPairId, LocalDateTime today) {
         List<TransactionResponseDto> transactions = transactionRepository.findByTradingPairIdAndUpdatedAtAfterOrderByPrice(tradingPairId, today).stream().map(TransactionResponseDto::new).toList();
         return transactions.get(transactions.size() - 1).getPrice();
